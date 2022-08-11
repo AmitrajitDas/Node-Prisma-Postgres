@@ -14,10 +14,13 @@ model User {
   id             Int             @id @default(autoincrement())
   name           String
   email          String          @unique
-  isAdmin        Boolean
+  role           Role            @default(NOOB)
   writtenPosts   Post[]          @relation("WrittenPosts")
   likedPosts     Post[]          @relation("LikedPosts")
   UserPreference UserPreference?
+
+  @@unique([name, email])
+  @@index([email])
 }
 
 model UserPreference {
@@ -43,4 +46,10 @@ model Category {
   id    Int    @id @default(autoincrement())
   name  String @unique
   posts Post[]
+}
+
+enum Role {
+  NOOB
+  PRO
+  ADMIN
 }
