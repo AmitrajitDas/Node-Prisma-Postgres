@@ -1,0 +1,59 @@
+//// ------------------------------------------------------
+//// THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+//// ------------------------------------------------------
+
+Table User {
+  id Int [pk, increment]
+  name String [not null]
+  email String [unique, not null]
+  role Role [not null, default: 'NOOB']
+  writtenPosts Post [not null]
+  likedPosts Post [not null]
+  UserPreference UserPreference
+
+  indexes {
+    (name, email) [unique]
+  }
+}
+
+Table UserPreference {
+  id Int [pk, increment]
+  emailUpdates Boolean [not null]
+  user User [not null]
+  userId Int [unique, not null]
+}
+
+Table Post {
+  id Int [pk, increment]
+  title String [not null]
+  createdAt DateTime [default: `now()`, not null]
+  updatedAt DateTime [not null]
+  author User [not null]
+  authorId Int [not null]
+  likedBy User
+  likedById Int
+  categories Category [not null]
+}
+
+Table Category {
+  id Int [pk, increment]
+  name String [unique, not null]
+  posts Post [not null]
+}
+
+Table CategoryToPost {
+  categoriesId Int [ref: > Category.id]
+  postsId Int [ref: > Post.id]
+}
+
+Enum Role {
+  NOOB
+  PRO
+  ADMIN
+}
+
+Ref: UserPreference.userId - User.id
+
+Ref: Post.authorId > User.id
+
+Ref: Post.likedById > User.id
